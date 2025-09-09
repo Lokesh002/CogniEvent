@@ -20,7 +20,7 @@ def chatbot_page():
         return
 
     display_names = [name.replace(".faiss", "") for name in vector_store_dirs]
-    selected_display_name = st.selectbox("Choose a transcript to chat with:", display_names)
+    selected_display_name = st.selectbox("Choose a vector db:", display_names)
 
     if selected_display_name:
         selected_vs_name = f"{selected_display_name}.faiss"

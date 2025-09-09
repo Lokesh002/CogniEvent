@@ -34,7 +34,7 @@ def process_and_summarize():
                     transcript_text = f.read()
             else:
                 with st.spinner("Transcribing audio... This may take a while for long files."):
-                    transcript_text = transcribe_audio_with_gemini( audio_path)
+                    transcript_text = transcribe_audio_with_gemini(audio_path)
                 
                 if transcript_text:
                     with open(transcript_path, "w", encoding="utf-8") as f:
@@ -47,7 +47,7 @@ def process_and_summarize():
                     st.text_area("Transcript", transcript_text, height=300)
                 
                 try:
-                    create_and_save_vector_store(transcript_text, "faiss_vdb")
+                    create_and_save_vector_store(transcript_text)
                 except RuntimeError as e:
                     st.error(str(e))
                 

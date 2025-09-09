@@ -2,7 +2,7 @@ from utils.config import Config
 import streamlit as st
 import os
 from utils.get_folder_contents import get_transcript_files
-from function.vector_db_ops import create_and_save_vector_store
+from function.vector_db_ops import update_vector_store
 def edit_transcript():
     st.header("Edit and Refine Transcripts")
     
@@ -24,10 +24,8 @@ def edit_transcript():
                 with open(transcript_path, "w", encoding="utf-8") as f:
                     f.write(edited_text)
                 st.success(f"Transcript '{selected_transcript}' saved!")
+                update_vector_store()
+                st.success("Vector store updated with edited transcripts.")
                 
-                if st.checkbox("Update the vector store for this transcript?"):
-                    base_filename = selected_transcript.replace("_transcript.txt", "")
-                    create_and_save_vector_store(Config.Folders.GOOGLE_API_KEY, edited_text, base_filename)
-
 if __name__ == "__main__":
     edit_transcript()
