@@ -6,15 +6,16 @@ import os
 import shutil
 from utils.config import Config
 import streamlit as st
+from utils.get_folder_contents import get_transcript_files
 
-def create_and_save_vector_store(transcript, base_filename):
+def create_and_save_vector_store(transcript):
     """Chunks transcript and saves it as a FAISS vector store."""
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=4000, chunk_overlap=200)
     embedding=get_embedding_001()
     chunks = text_splitter.split_text(text=transcript)
     try:
         if not os.path.exists(f"{Config.Folders.VECTOR_STORE_DIR}/faiss_vdb.faiss"):
-            vector_store = FAISS.from_texts(chunks, embeddings=embedding)
+            vector_store = FAISS.from_texts(chunks, embedding=embedding)
         else:
             vector_store = FAISS.load_local(f"{Config.Folders.VECTOR_STORE_DIR}/faiss_vdb.faiss", embeddings=embedding, allow_dangerous_deserialization=True)
             vector_store.add_texts(chunks)
@@ -35,3 +36,14 @@ def get_vector_store():
         return vector_store
     except Exception as e:
         raise RuntimeError(f"An error occurred while loading vector store: {e}")
+    
+def update_vector_store():
+    #delete the existing vector store and create new with all the transcripts present
+    if os.path.exists(f"{Config.Folders.VECTOR_STORE_DIR}/faiss_vdb.faiss"):
+        shutil.rmtree(f"{Config.Folders.VECTOR_STORE_DIR}/faiss_vdb.faiss")
+    transcripts = get_transcript_files()
+    for transcript in transcripts:
+        with open(os.path.join(Config.Folders.TRANSCRIPT_DIR, transcript), "r", encoding="utf-8") as f:
+            transcript_text = f.read()
+        create_and_save_vector_store(transcript_text)
+    

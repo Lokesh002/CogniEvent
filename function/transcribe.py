@@ -8,7 +8,7 @@ def transcribe_audio_with_gemini(audio_file_path):
     with open(audio_file_path, "rb") as audio_file:
         audio_data = base64.b64encode(audio_file.read()).decode("utf-8")
     
-    mime_type = "audio/mpeg" if audio_file_path.endswith('.mp3') else f"audio/{os.path.splitext(audio_file_path)[1][1:]}"
+    mime_type = f"audio/{os.path.splitext(audio_file_path)[1][1:]}"
 
     prompt_text = Config.Prompts.TRANSCRIPTION_PROMPT
     message = HumanMessage(content=[{"type": "text", "text": prompt_text}, 

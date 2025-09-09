@@ -20,24 +20,24 @@ def file_manager():
         vector_store_path = os.path.join(Config.Folders.VECTOR_STORE_DIR, f"{base_name}.faiss")
         if os.path.exists(vector_store_path): shutil.rmtree(vector_store_path)
 
-    # --- Video Files Section ---
-    st.subheader("Uploaded Video Files")
-    video_files = get_video_files()
-    if not video_files: st.info("No video files have been uploaded yet.")
-    else:
-        for filename in video_files:
-            col1, col2, col3 = st.columns([4, 1, 1])
-            with col1: st.text(filename)
-            with col2:
-                with open(os.path.join(Config.Folders.VIDEO_DIR, filename), "rb") as f:
-                    st.download_button("⬇️", f, file_name=filename, mime="video/mp4", key=f"dl_vid_{filename}", help=f"Download {filename}")
-            with col3:
-                if st.button("🗑️", key=f"del_vid_{filename}", help=f"Delete video and all associated files"):
-                    base_name = get_base_filename(filename)
-                    os.remove(os.path.join(Config.Folders.VIDEO_DIR, filename)) # Delete video
-                    delete_associated_files(base_name) # Delete everything else
-                    st.success(f"Deleted '{filename}' and all its associated files.")
-                    st.rerun()
+    # # --- Video Files Section ---
+    # st.subheader("Uploaded Video Files")
+    # video_files = get_video_files()
+    # if not video_files: st.info("No video files have been uploaded yet.")
+    # else:
+    #     for filename in video_files:
+    #         col1, col2, col3 = st.columns([4, 1, 1])
+    #         with col1: st.text(filename)
+    #         with col2:
+    #             with open(os.path.join(Config.Folders.VIDEO_DIR, filename), "rb") as f:
+    #                 st.download_button("⬇️", f, file_name=filename, mime="video/mp4", key=f"dl_vid_{filename}", help=f"Download {filename}")
+    #         with col3:
+    #             if st.button("🗑️", key=f"del_vid_{filename}", help=f"Delete video and all associated files"):
+    #                 base_name = get_base_filename(filename)
+    #                 os.remove(os.path.join(Config.Folders.VIDEO_DIR, filename)) # Delete video
+    #                 delete_associated_files(base_name) # Delete everything else
+    #                 st.success(f"Deleted '{filename}' and all its associated files.")
+    #                 st.rerun()
 
     st.markdown("---")
 
