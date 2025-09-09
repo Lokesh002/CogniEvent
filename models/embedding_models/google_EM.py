@@ -10,6 +10,6 @@ def get_embedding_001():
     except RuntimeError:
         asyncio.set_event_loop(asyncio.new_event_loop())
     return GoogleGenerativeAIEmbeddings(
-        model="models/embedding-001",
+        model="models/gemini-embedding-001",
         google_api_key=os.getenv("GOOGLE_API_KEY")
     )

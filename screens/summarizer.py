@@ -45,11 +45,11 @@ def process_and_summarize():
             else:
                 with st.expander("View Full Transcript"):
                     st.text_area("Transcript", transcript_text, height=300)
-                
-                try:
-                    create_and_save_vector_store(transcript_text)
-                except RuntimeError as e:
-                    st.error(str(e))
+                if not os.path.exists(transcript_path):
+                    try:
+                        create_and_save_vector_store(transcript_text)
+                    except RuntimeError as e:
+                        st.error(str(e))
                 
                 st.markdown("---")
                 
